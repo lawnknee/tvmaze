@@ -1,5 +1,6 @@
 "use strict";
 
+/* GLOBAL variables */
 const $showsList = $("#showsList");
 const $episodesArea = $("#episodesArea");
 const $searchForm = $("#searchForm");
@@ -16,16 +17,23 @@ async function getShowsByTerm(term) {
   // make request to TVMaze search shows API.
   let response = await axios.get(`http://api.tvmaze.com/search/shows?q=${term}`);
   let showsArray = response.data;
-// debugger;
   let formattedArray = [];
   
+  /* iterates through the showArray and narrowing each show object to specific properties we want */
+
+  // debugger;
   for(let showObj of showsArray) {
     let image;
+
     if(!showObj.show.image){
       image = 'https://tinyurl.com/tv-missing'
     } else {
       image = showObj.show.image.medium;
     }
+
+    // let image = (showObj.show.image) 
+    //  ? showObj.show.image.medium 
+    //  : 'https://tinyurl.com/tv-missing';
 
     let newShowObj = {
       id: showObj.show.id,
@@ -53,7 +61,7 @@ function populateShows(shows) {
         `<div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
          <div class="media">
            <img 
-              src="${figureOutImgVariable}" 
+              src="${show.image}" 
               alt="Bletchly Circle San Francisco" 
               class="w-25 mr-3">
            <div class="media-body">
