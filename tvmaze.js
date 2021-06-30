@@ -15,8 +15,31 @@ const $term = $("#searchForm-term").val();
 async function getShowsByTerm(term) {
   // make request to TVMaze search shows API.
   let response = await axios.get(`http://api.tvmaze.com/search/shows?q=${term}`);
-  let shows = response.data;
-  return shows;
+  let showsArray = response.data;
+// debugger;
+  let formattedArray = [];
+  
+  for(let showObj of showsArray) {
+    let image;
+    if(!showObj.show.image){
+      image = 'https://tinyurl.com/tv-missing'
+    } else {
+      image = showObj.show.image.medium;
+    }
+
+    let newShowObj = {
+      id: showObj.show.id,
+      name: showObj.show.name,
+      summary: showObj.show.summary,
+      image: image
+    }
+
+    formattedArray.push(newShowObj);
+  }
+  
+  
+  
+  return formattedArray;
 }
 
 
@@ -30,7 +53,7 @@ function populateShows(shows) {
         `<div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
          <div class="media">
            <img 
-              src="http://static.tvmaze.com/uploads/images/medium_portrait/160/401704.jpg" 
+              src="${figureOutImgVariable}" 
               alt="Bletchly Circle San Francisco" 
               class="w-25 mr-3">
            <div class="media-body">
