@@ -5,6 +5,7 @@ const $showsList = $("#showsList");
 const $episodesArea = $("#episodesArea");
 const $searchForm = $("#searchForm");
 const $term = $("#searchForm-term").val();
+const $baseURL = 'http://api.tvmaze.com/search/'
 
 /** Given a search term, search for tv shows that match that query.
  *
@@ -96,11 +97,31 @@ $searchForm.on("submit", async function (evt) {
 });
 
 
-/** Given a show ID, get from API and return (promise) array of episodes:
+/** Given a show ID, get from API and return (promise) array of episodes after 'Episodes' button is clicked:
  *      { id, name, season, number }
  */
 
-// async function getEpisodesOfShow(id) { }
+async function getEpisodesOfShow(id) {
+  let response = await axios.get(`http://api.tvmaze.com/shows/${id}/episodes`);
+  let episodes = response.data;
+
+  let formattedEpisodes = [];
+
+  for (let episode of episodes) {
+    let { id, name, season, number } = episode;
+    
+    let newEpisodeObj = {
+      id,
+      name,
+      season,
+      number,
+    }
+    formattedEpisodes.push(newEpisodeObj);
+  }
+  console.log(formattedEpisodes);
+  return formattedEpisodes;
+}
+getEpisodesOfShow(139);
 
 /** Write a clear docstring for this function... */
 
